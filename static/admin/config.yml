@@ -1,0 +1,69 @@
+backend:
+  name: git-gateway
+  branch: main # Branch to update (optional; defaults to master)
+media_folder: static/img
+public_folder: /img
+
+locales: 
+ - en
+ - ru
+ - ua
+
+show_preview_links: true
+
+collections:
+  - label: "Languages"
+    name: "languages"
+    folder: "data/languages"
+    extension: "yml"
+    format: "yml"
+    create: true
+    slug: "{{code}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "Language", name: "language" , widget: string}
+      - { label: "Country Code (for url)", name: "code" , widget: string}
+  - label: "Post"
+    name: "post"
+    folder: "_posts"
+    slug: "{{year}}-{{month}}-{{day}}-{{title}}"
+    create: true
+    editor:
+      preview: false
+    fields:
+      - label: Language
+        name: language
+        widget: relation
+        collection: languages
+        searchFields: ["language"]
+        valueField: code
+        displayFields: ["language"]
+        default: "en"
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Body", name: "body", widget: "markdown" }
+  - label: "About"
+    name: "about"
+    folder: "_about"
+    slug: "{{language}}"
+    create: true
+    editor:
+      preview: false
+    fields:
+      - {
+          label: Language,
+          name: language,
+          widget: relation,
+          collection: languages,
+          searchFields: ["language"],
+          valueField: code,
+          displayFields: ["language"],
+          default: "en",
+        }
+      - {
+          label: "Title",
+          name: "title",
+          widget: "string",
+          default: "About us",
+        }
+      - { label: "Body", name: "body", widget: "markdown" }
